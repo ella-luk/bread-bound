@@ -67,21 +67,21 @@ let hoverArea4 = {
 let selectedDessert = null;
 
 function preload() {
-  bg = loadImage('baker.png');
-  img = loadImage('cat.png');
-  speech = loadImage('speech.png');
-  font = loadFont('font.ttf');
-  sound = loadSound('music.mp3');
-  bg2 = loadImage('bakeryinside.png');
-  station1 = loadImage('station1.png');
-  station1pudding = loadImage('station1pudding.png');
-  pie1 = loadImage('station1pie.png');
-  cupcake1 = loadImage('station1cupcake.png');
-  icecream1 = loadImage('station1icecream.png');
-  choosepie = loadImage('choosepie.png');
-  choosecupcake = loadImage('choosecupcake.png');
-  choosepudding = loadImage('choosepudding.png');
-  chooseicecream = loadImage('chooseicecream.png');
+  bg = loadImage('assets/baker.png');
+  img = loadImage('assets/cat.png');
+  speech = loadImage('assets/speech.png');
+  font = loadFont('assets/font.ttf');
+  sound = loadSound('assets/music.mp3');
+  bg2 = loadImage('assets/bakeryinside.png');
+  station1 = loadImage('asset/sstation1.png');
+  station1pudding = loadImage('assets/station1pudding.png');
+  pie1 = loadImage('assets/station1pie.png');
+  cupcake1 = loadImage('assets/station1cupcake.png');
+  icecream1 = loadImage('assets/station1icecream.png');
+  choosepie = loadImage('assets/choosepie.png');
+  choosecupcake = loadImage('assets/choosecupcake.png');
+  choosepudding = loadImage('assets/choosepudding.png');
+  chooseicecream = loadImage('assets/chooseicecream.png');
 }
 
 
