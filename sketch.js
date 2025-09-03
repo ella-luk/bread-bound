@@ -73,7 +73,7 @@ function preload() {
   font = loadFont('assets/font.ttf');
   sound = loadSound('assets/music.mp3');
   bg2 = loadImage('assets/bakeryinside.png');
-  station1 = loadImage('asset/sstation1.png');
+  station1 = loadImage('assets/station1.png');
   station1pudding = loadImage('assets/station1pudding.png');
   pie1 = loadImage('assets/station1pie.png');
   cupcake1 = loadImage('assets/station1cupcake.png');
