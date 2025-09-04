@@ -87,7 +87,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight).parent('sketch');
+  createCanvas(windowWidth - 510, windowHeight -150).parent('sketch');
 
   let btn = document.getElementById('toggle-sound');
   if (btn) {
@@ -452,4 +452,5 @@ function restartSketch() {
   catSpeechComplete = false;
 }
 
+// Initial state variables
 let showContinueBtn = true;
