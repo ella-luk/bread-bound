@@ -87,7 +87,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth - 510, windowHeight -150).parent('sketch');
+  createCanvas(windowWidth, windowHeight).parent('sketch');
 
   let btn = document.getElementById('toggle-sound');
   if (btn) {
