@@ -452,5 +452,4 @@ function restartSketch() {
   catSpeechComplete = false;
 }
 
-// Initial state variables
 let showContinueBtn = true;
