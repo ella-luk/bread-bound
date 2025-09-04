@@ -29,8 +29,10 @@ let sound, bg, img, speech, font;
 let textColor = '#000000';
 let scene = "welcome"; // "welcome" or "next"
 
-// Continue button variables
-let showContinueBtn = false;
+const DESIGN_WIDTH = 910;
+const DESIGN_HEIGHT = 650;
+
+// UI elements based on DESIGN_WIDTH and DESIGN_HEIGHT
 let btnX = 720;
 let btnY = 580;
 let btnW = 150;
@@ -84,11 +86,8 @@ function preload() {
   chooseicecream = loadImage('assets/chooseicecream.png');
 }
 
-
 function setup() {
-  // const c = createCanvas(910, 650);
-  const c = createCanvas(910,650);
-  c.parent('sketch');
+  createCanvas(windowWidth - 510, windowHeight -150).parent('sketch');
 
   let btn = document.getElementById('toggle-sound');
   if (btn) {
@@ -121,8 +120,8 @@ function setup() {
 
 class Sparkle {
   constructor() {
-    this.x = random(width);
-    this.y = random(height);
+    this.x = random(DESIGN_WIDTH);
+    this.y = random(DESIGN_HEIGHT);
     this.alpha = 0;
     this.fadeSpeed = random(2, 5);
     this.fadingIn = true;
@@ -141,8 +140,8 @@ class Sparkle {
       if (this.alpha <= 0) {
         this.alpha = 5;
         this.fadingIn = true;
-        this.x = random(width);
-        this.y = random(height);
+        this.x = random(DESIGN_WIDTH);
+        this.y = random(DESIGN_HEIGHT);
       }
     }
   }
@@ -155,282 +154,284 @@ class Sparkle {
 }
 
 function draw() {
-  background(220);
+  background(255);
+
+  // Calculate scale and offsets for centering content
+  const scaleX = width / DESIGN_WIDTH;
+  const scaleY = height / DESIGN_HEIGHT;
+  const scaleFactor = min(scaleX, scaleY);
+
+  const offsetX = (width - DESIGN_WIDTH * scaleFactor) / 2;
+  const offsetY = (height - DESIGN_HEIGHT * scaleFactor) / 2;
+
+  push();
+  translate(offsetX, offsetY);
+  scale(scaleFactor);
+
+  // Scale UI elements positions and sizes for hit detection and drawing
+  const scaledBtnX = btnX;
+  const scaledBtnY = btnY;
+  const scaledBtnW = btnW;
+  const scaledBtnH = btnH;
 
   if (scene === "welcome") {
-  image(bg, 0, 0, 910, 650);
+    image(bg, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
 
-  for (let sparkle of particles) {
-    sparkle.update();
-    sparkle.show();
-  }
-  image(speech, 500, 170, 200, 200);
-  image(img, 380, 190, 300, 380);
+    for (let sparkle of particles) {
+      sparkle.update();
+      sparkle.show();
+    }
+    image(speech, 500, 170, 200, 200);
+    image(img, 380, 190, 300, 380);
 
-  textSize(14);
-  fill(textColor);
-  textFont(font);
-  textAlign(CENTER, CENTER);
-  text(speechText,600,266);
-
-  text("[ click mousepad to continue ]", width/2,620)
-
-  // Draw continue button if needed
-  if (showContinueBtn) {
-    fill(255);
-    stroke(0);
-    strokeWeight(3);
-    rect(btnX, btnY, btnW, btnH, 10); // rounded corners
-
-    noStroke();
-    fill(0);
+    textSize(14);
+    fill(textColor);
+    textFont(font);
     textAlign(CENTER, CENTER);
-    textSize(16);
-    text("continue", btnX + btnW / 2, btnY + btnH / 2);
-  }
-   } 
-   
-   else if (scene === "next") {
-    // ✨ Scene 2: New screen
-    image(bg2, 0, 0, 910, 650);
-    image(img, 190, 150, 300, 380)
+    text(speechText, 600, 266);
+
+    if (showContinueBtn) {
+      fill(255);
+      stroke(0);
+      strokeWeight(3);
+      rect(scaledBtnX, scaledBtnY, scaledBtnW, scaledBtnH, 40);
+
+      noStroke();
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(16);
+      text("continue", scaledBtnX + scaledBtnW / 2, scaledBtnY + scaledBtnH / 2);
+    }
+  } else if (scene === "next") {
+    image(bg2, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    image(img, 190, 150, 300, 380);
     image(speech, 320, 130, 200, 200);
 
     textSize(14);
-  fill(textColor);
-  textFont(font);
-  textAlign(CENTER, CENTER);
-  text(scene2Text, 415, 226); 
-  text("[ click mousepad to continue ]", width/2,620)
-
-  if (showContinueBtn) {
-    fill(255);
-    stroke(0);
-    strokeWeight(3);
-    rect(btnX, btnY, btnW, btnH, 10); // rounded corners
-
-    noStroke();
-    fill(0);
+    fill(textColor);
+    textFont(font);
     textAlign(CENTER, CENTER);
-    textSize(16);
-    text("continue", btnX + btnW / 2, btnY + btnH / 2);
-  }
-  }
+    text(scene2Text, 415, 226);
 
-  else if (scene === "scene3") {
-  background(219, 193, 180);
-  for (let sparkle of particles) {
-    sparkle.update();
-    sparkle.show();
-  }
+    if (showContinueBtn) {
+      fill(255);
+      stroke(0);
+      strokeWeight(3);
+      rect(scaledBtnX, scaledBtnY, scaledBtnW, scaledBtnH, 40);
 
-  // Base station background
-  image(station1, 0, 0, 910, 650);
+      noStroke();
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(16);
+      text("continue", scaledBtnX + scaledBtnW / 2, scaledBtnY + scaledBtnH / 2);
+    }
+  } else if (scene === "scene3") {
+    background(255);
+    for (let sparkle of particles) {
+      sparkle.update();
+      sparkle.show();
+    }
 
-  // Show selected image if clicked, otherwise use hover
-  if (selectedDessert !== null) {
-    if (selectedDessert === "pudding") {
-      image(choosepudding, 0, 0, 910, 650);
+    image(station1, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+
+    // Show selected dessert image or hover previews
+    if (selectedDessert !== null) {
+      if (selectedDessert === "pudding") {
+        image(choosepudding, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      } else if (selectedDessert === "pie") {
+        image(choosepie, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      } else if (selectedDessert === "cupcake") {
+        image(choosecupcake, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      } else if (selectedDessert === "icecream") {
+        image(chooseicecream, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      }
       fill(textColor);
       textSize(14);
       textFont(font);
-      text("[ click mousepad to continue ]", width/2,620)
-    } else if (selectedDessert === "pie") {
-      image(choosepie, 0, 0, 910, 650);
-      fill(textColor);
-      textSize(14);
-      textFont(font);
-      text("[ click mousepad to continue ]", width/2,620)
-    } else if (selectedDessert === "cupcake") {
-      image(choosecupcake, 0, 0, 910, 650);
-      fill(textColor);
-      textSize(14);
-      textFont(font);
-      text("[ click mousepad to continue ]", width/2,620)
-    } else if (selectedDessert === "icecream") {
-      image(chooseicecream, 0, 0, 910, 650);
-      fill(textColor);
-      textSize(14);
-      textFont(font);
-      text("[ click mousepad to continue ]", width/2,620)
+    } else {
+      // Hover previews for dessert selection
+      const mx = mouseXScaled();
+      const my = mouseYScaled();
+
+      if (pointInRect(mx, my, hoverArea)) {
+        image(station1pudding, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      }
+      if (pointInRect(mx, my, hoverArea2)) {
+        image(pie1, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      }
+      if (pointInRect(mx, my, hoverArea3)) {
+        image(cupcake1, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      }
+      if (pointInRect(mx, my, hoverArea4)) {
+        image(icecream1, 0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+      }
     }
-  } else {
-    // No dessert selected yet — use hover to preview
-    if (mouseX > hoverArea.x && mouseX < hoverArea.x + hoverArea.width &&
-        mouseY > hoverArea.y && mouseY < hoverArea.y + hoverArea.height) {
-      image(station1pudding, 0, 0, 910, 650); 
-    }
-    if (mouseX > hoverArea2.x && mouseX < hoverArea2.x + hoverArea2.width &&
-        mouseY > hoverArea2.y && mouseY < hoverArea2.y + hoverArea2.height) {
-      image(pie1, 0, 0, 910, 650); 
-    }
-    if (mouseX > hoverArea3.x && mouseX < hoverArea3.x + hoverArea3.width &&
-        mouseY > hoverArea3.y && mouseY < hoverArea3.y + hoverArea3.height) {
-      image(cupcake1, 0, 0, 910, 650); 
-    }
-    if (mouseX > hoverArea4.x && mouseX < hoverArea4.x + hoverArea4.width &&
-        mouseY > hoverArea4.y && mouseY < hoverArea4.y + hoverArea4.height) {
-      image(icecream1, 0, 0, 910, 650); 
-    }
-  }
 
-  fill(textColor);
-  textSize(30);
-  text("station one — choose your dessert base", width/2, 60);
-  textSize(15);
-  text("hover over an option, then press to select!", width/2, 100);
-
-  if (showCatSpeech) {
-  // New positions
-  let catX = 0;
-  let catY = 380;
-  let catW = 250;
-  let catH = 320;
-
-  let bubbleX = catX + 90;
-  let bubbleY = catY - 50;
-  let bubbleW = 200;
-  let bubbleH = 200;
-
-  // Draw cat and bubble
-  image(img, catX, catY, catW, catH); // cat in bottom left
-  image(speech, bubbleX, bubbleY, bubbleW, bubbleH); // speech bubble
-
-  // Draw text in speech bubble
-  fill(textColor);
-  textSize(14);
-  textFont(font);
-  textAlign(CENTER, CENTER);
-  if (catSpeechIndex < catSpeechPhrases.length) {
-    text(catSpeechPhrases[catSpeechIndex], bubbleX + bubbleW / 2, bubbleY + bubbleH / 2 -5);
-  }
-}
-
-if (showContinueBtn) {
-    fill(255);
-    stroke(0);
-    strokeWeight(3);
-    rect(btnX, btnY, btnW, btnH, 10); // rounded corners
-
-    noStroke();
-    fill(0);
+    fill(textColor);
+    textSize(30);
     textAlign(CENTER, CENTER);
-    textSize(16);
-    text("continue", btnX + btnW / 2, btnY + btnH / 2);
-  }
+    text("station one — choose your dessert base", DESIGN_WIDTH / 2, 60);
+    textSize(15);
+    text("hover over an option, then press to select!", DESIGN_WIDTH / 2, 100);
 
-}
+    if (showCatSpeech) {
+      // Cat speech bubble positioning
+      let catX = 0;
+      let catY = 380;
+      let catW = 250;
+      let catH = 320;
 
-  else if (scene === 'scene4') {
+      let bubbleX = catX + 90;
+      let bubbleY = catY - 50;
+      let bubbleW = 200;
+      let bubbleH = 200;
+
+      image(img, catX, catY, catW, catH);
+      image(speech, bubbleX, bubbleY, bubbleW, bubbleH);
+
+      fill(textColor);
+      textSize(14);
+      textFont(font);
+      textAlign(CENTER, CENTER);
+      if (catSpeechIndex < catSpeechPhrases.length) {
+        text(catSpeechPhrases[catSpeechIndex], bubbleX + bubbleW / 2, bubbleY + bubbleH / 2 - 5);
+      }
+    }
+
+    if (showContinueBtn) {
+      fill(255);
+      stroke(0);
+      strokeWeight(3);
+      rect(scaledBtnX, scaledBtnY, scaledBtnW, scaledBtnH, 40);
+
+      noStroke();
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(16);
+      text("continue", scaledBtnX + scaledBtnW / 2, scaledBtnY + scaledBtnH / 2);
+    }
+  } else if (scene === 'scene4') {
     background(220);
     fill(0);
     textSize(15);
-    textFont(font)
-    text("station two — select your flavoring", width/2, height/2);
+    textFont(font);
+    textAlign(CENTER, CENTER);
+    text("station two — select your flavoring", DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2);
   }
 
+  pop();
 }
 
-
 function mousePressed() {
-  if (
-    mouseX >= 0 && mouseX <= width &&
-    mouseY >= 0 && mouseY <= height
-  ) {
-    // SCENE: "welcome"
-    if (scene === "welcome") {
-      if (phraseIndex < phrases.length) {
-        speechText = phrases[phraseIndex];
-        phraseIndex++;
-        if (phraseIndex === phrases.length) {
-          showContinueBtn = true;
-        }
-      }
+  const scaleX = width / DESIGN_WIDTH;
+  const scaleY = height / DESIGN_HEIGHT;
+  const scaleFactor = min(scaleX, scaleY);
 
-      // Check if continue button is clicked in welcome scene
-      if (
-        showContinueBtn &&
-        mouseX > btnX && mouseX < btnX + btnW &&
-        mouseY > btnY && mouseY < btnY + btnH
-      ) {
-        scene = "next";
-        showContinueBtn = false; // reset button for scene 2
-      }
+  const offsetX = (width - DESIGN_WIDTH * scaleFactor) / 2;
+  const offsetY = (height - DESIGN_HEIGHT * scaleFactor) / 2;
 
+  // Convert mouse coords to design coords
+  const mx = (mouseX - offsetX) / scaleFactor;
+  const my = (mouseY - offsetY) / scaleFactor;
+
+  if (scene === "welcome") {
+    if (showContinueBtn && pointInRect(mx, my, {x: btnX, y: btnY, width: btnW, height: btnH})) {
+      advanceWelcome();
     }
-
-    // SCENE: "next"
-    else if (scene === "next") {
-      // Show scene 2 phrases one by one
-      if (scene2Index < scene2Phrases.length) {
-        scene2Text = scene2Phrases[scene2Index];
-        scene2Index++; // increment after showing text
-
-        // Show continue button only after last phrase
-        if (scene2Index === scene2Phrases.length) {
-          showContinueBtn = true;
-        }
-      } else {
-        // Continue button clicked after all scene 2 phrases shown
-        if (
-          showContinueBtn &&
-          mouseX > btnX && mouseX < btnX + btnW &&
-          mouseY > btnY && mouseY < btnY + btnH
-        ) {
-          scene = "scene3";
-          showContinueBtn = false; // reset for next scene
-        }
-      }
+  } else if (scene === "next") {
+    if (showContinueBtn && pointInRect(mx, my, {x: btnX, y: btnY, width: btnW, height: btnH})) {
+      advanceScene2();
     }
-
-    // SCENE: "scene3" (dessert selection)
-    else if (scene === "scene3") {
-  // Only allow selection if nothing has been selected yet
-  if (selectedDessert === null) {
-    if (mouseX > hoverArea.x && mouseX < hoverArea.x + hoverArea.width &&
-        mouseY > hoverArea.y && mouseY < hoverArea.y + hoverArea.height) {
+  } else if (scene === "scene3") {
+  if (!showCatSpeech) {
+    // Dessert selection
+    if (pointInRect(mx, my, hoverArea)) {
       selectedDessert = "pudding";
-    } else if (mouseX > hoverArea2.x && mouseX < hoverArea2.x + hoverArea2.width &&
-               mouseY > hoverArea2.y && mouseY < hoverArea2.y + hoverArea2.height) {
-      selectedDessert = "pie";
-    } else if (mouseX > hoverArea3.x && mouseX < hoverArea3.x + hoverArea3.width &&
-               mouseY > hoverArea3.y && mouseY < hoverArea3.y + hoverArea3.height) {
-      selectedDessert = "cupcake";
-    } else if (mouseX > hoverArea4.x && mouseX < hoverArea4.x + hoverArea4.width &&
-               mouseY > hoverArea4.y && mouseY < hoverArea4.y + hoverArea4.height) {
-      selectedDessert = "icecream";
-    }
-
-    // If a selection was made, trigger the cat speech
-    if (selectedDessert !== null) {
       showCatSpeech = true;
       catSpeechIndex = 0;
       catSpeechComplete = false;
+      showContinueBtn = true;  // <-- Keep button visible!
+    } else if (pointInRect(mx, my, hoverArea2)) {
+      selectedDessert = "pie";
+      showCatSpeech = true;
+      catSpeechIndex = 0;
+      catSpeechComplete = false;
+      showContinueBtn = true;
+    } else if (pointInRect(mx, my, hoverArea3)) {
+      selectedDessert = "cupcake";
+      showCatSpeech = true;
+      catSpeechIndex = 0;
+      catSpeechComplete = false;
+      showContinueBtn = true;
+    } else if (pointInRect(mx, my, hoverArea4)) {
+      selectedDessert = "icecream";
+      showCatSpeech = true;
+      catSpeechIndex = 0;
+      catSpeechComplete = false;
+      showContinueBtn = true;
+    }
+  } else if (showCatSpeech && !catSpeechComplete) {
+  catSpeechIndex++;
+  if (catSpeechIndex >= catSpeechPhrases.length) {
+    catSpeechIndex = catSpeechPhrases.length - 1; // Prevent overflow
+    catSpeechComplete = true;
+  }
+  } else if (showCatSpeech && catSpeechComplete && showContinueBtn) {
+    if (pointInRect(mx, my, {x: btnX, y: btnY, width: btnW, height: btnH})) {
+      scene = "scene4";
+      showContinueBtn = false;
     }
   }
-  else if (showCatSpeech && !catSpeechComplete) {
-  catSpeechIndex++;
-
-  if (catSpeechIndex >= catSpeechPhrases.length - 1) {
-    catSpeechIndex = catSpeechPhrases.length - 1; // prevent out-of-bounds
-    catSpeechComplete = true;
-    showContinueBtn = true;
-  }
-} else {
-        if (
-          showContinueBtn &&
-          mouseX > btnX && mouseX < btnX + btnW &&
-          mouseY > btnY && mouseY < btnY + btnH
-        ) {
-          scene = "scene4";
-          showContinueBtn = false; // reset for next scene
-        }
-      }
 }
+}
+
+function advanceWelcome() {
+  phraseIndex++;
+  if (phraseIndex < phrases.length) {
+    speechText = phrases[phraseIndex];
+  } else {
+    scene = "next";
+    scene2Text = scene2Phrases[0];
+    scene2Index = 0;
+    phraseIndex = 0;
+    speechText = "";
   }
 }
 
+function advanceScene2() {
+  scene2Index++;
+  if (scene2Index < scene2Phrases.length) {
+    scene2Text = scene2Phrases[scene2Index];
+  } else {
+    scene = "scene3";
+    scene2Text = "";
+    showContinueBtn = false;
+  }
+}
 
+function pointInRect(px, py, rect) {
+  return px > rect.x && px < rect.x + rect.width && py > rect.y && py < rect.y + rect.height;
+}
+
+function mouseXScaled() {
+  const scaleX = width / DESIGN_WIDTH;
+  const scaleY = height / DESIGN_HEIGHT;
+  const scaleFactor = min(scaleX, scaleY);
+  const offsetX = (width - DESIGN_WIDTH * scaleFactor) / 2;
+  return (mouseX - offsetX) / scaleFactor;
+}
+
+function mouseYScaled() {
+  const scaleX = width / DESIGN_WIDTH;
+  const scaleY = height / DESIGN_HEIGHT;
+  const scaleFactor = min(scaleX, scaleY);
+  const offsetY = (height - DESIGN_HEIGHT * scaleFactor) / 2;
+  return (mouseY - offsetY) / scaleFactor;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 function toggleMusic() {
   if (sound.isPlaying()) {
@@ -441,52 +442,15 @@ function toggleMusic() {
 }
 
 function restartSketch() {
-  // Reset scene state
-  scene = "welcome";
-  nextScene = null;
-  isTransitioning = false;
-  transitionAlpha = 0;
-
-  // Reset speech text & index
   phraseIndex = 0;
   speechText = "hello! welcome to \nbread bound!";
-  showContinueBtn = false;
-
-  // Reset particles
-  particles = [];
-  for (let i = 0; i < 100; i++) {
-    particles.push(new Sparkle());
-  }
-
-  // Reset sound
-  if (sound.isPlaying()) {
-    sound.stop();
-  }
-
-  const volumeSlider = document.getElementById('vol');
-  if (volumeSlider) {
-    volumeSlider.value = 0.5;
-    document.getElementById('volVal').textContent = "0.50";
-    sound.setVolume(0.5);
-  }
-
-  // Reset text color
-  const textColorPicker = document.getElementById('text-color');
-  if (textColorPicker) {
-    textColorPicker.value = '#000000';
-    textColor = '#000000';
-  }
-  scene2Index = 0;
-  scene2Text = scene2Phrases[0];
-
+  scene = "welcome";
+  showContinueBtn = true;
+  showCatSpeech = false;
   selectedDessert = null;
-catSpeechIndex = 0;
-showCatSpeech = false;
-catSpeechComplete = false;
+  catSpeechIndex = 0;
+  catSpeechComplete = false;
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-
-//hello 
+// Initial state variables
+let showContinueBtn = true;
